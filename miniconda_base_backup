@@ -1,0 +1,86 @@
+FROM continuumio/miniconda3
+
+SHELL ["/bin/bash","-c"]
+
+RUN apt-get update && \
+    apt-get install -y \
+    unzip \
+    #wget \
+    make \
+    cmake \
+    build-essential \
+    git \
+    ssh \
+    vim \
+    libblas3 \
+    libblas-dev \
+    liblapack3 \
+    liblapack-dev \
+    libatlas3-base \
+    libatlas-base-dev \
+    openmpi-bin \
+    libopenmpi-dev \
+    gfortran \
+    gsl-bin \
+    libgsl-dev \
+    curl
+
+RUN pip install GetDist==0.3.1 \
+    nestcheck==0.2.0 \
+    fgivenx \
+    wrapt
+
+RUN conda install -y \
+    scipy \
+    matplotlib
+
+# Conda env creation, and tell shell to start conda on opening (may not need the last bit)
+RUN curl -L https://raw.githubusercontent.com/ThomasEdwardRiley/xpsi/v0.7.5/environment.yml > /tmp/environment.yml && \
+    conda env create -f /tmp/environment.yml; exit 0 && \
+    # SHELL ["/bin/bash","-c"]   was before the following in previous versions of Dockerfile
+    conda init && \
+    echo 'conda activate xpsi' >> ~/.bashrc
+
+# Jupyter stuff
+SHELL [ "conda", "run", "-n", "xpsi", "/bin/bash", "-c" ]
+RUN python -m ipykernel install --name xpsi --display-name "XPSI Notebook"
+
+# Install MultiNest
+RUN git clone https://github.com/farhanferoz/MultiNest.git /opt/multinest-a2b1b5feb5 && \
+    cd /opt/multinest-a2b1b5feb5 && \
+    git checkout a2b1b5feb5 && \
+    cd /opt/multinest-a2b1b5feb5/MultiNest_v3.11_CMake/multinest/ && \
+    mkdir build && \
+    cd build && \
+    CC=gcc FC=mpif90 CXX=g++ cmake -DCMAKE_{C,CXX}_FLAGS="-O3 -march=native -funroll-loops" -DCMAKE_Fortran_FLAGS="-O3 -march=native -funroll-loops" .. && \
+    make
+ENV LD_LIBRARY_PATH=/opt/multinest-a2b1b5feb5/MultiNest_v3.11_CMake/multinest/lib:$LD_LIBRARY_PATH
+
+# Install PyMultiNest
+RUN git clone https://github.com/JohannesBuchner/PyMultiNest.git && \
+    cd PyMultiNest/ && \
+    python setup.py install
+
+
+# Make xpsi user, switch to that user's directory
+RUN useradd xpsi -m
+WORKDIR /home/xpsi
+
+# Clone and install xpsi
+RUN git clone https://github.com/ThomasEdwardRiley/xpsi.git && \
+    cd /home/xpsi/xpsi && \
+    git checkout v0.7.5 && \
+    CC=/usr/bin/gcc python setup.py install
+  
+# Copy files to image. Need v0.7.5/ and start.sh. Make sure start.sh has correct permissions
+COPY v0.7.5 .
+COPY start.sh .
+RUN chmod u+x start.sh
+
+USER xpsi
+# RUN conda init && \
+#     echo 'conda activate xpsi' >> ~/.bashrc
+
+# # CMD to run jupyter via a shell script
+# CMD conda init && exec bash
+
