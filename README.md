@@ -1,12 +1,15 @@
 # nicer
 Files for NICER reproducibility project
 
-This repository contains a dockerfile for a Docker image that runs an XPSI tutorial jupyter notebook, as well as that jupyter notebook.
+This repository is intended to streamline the use of XPSI via a Docker container.
 
-## Instructions:  
-1. Clone this repository to an empty folder on your local machine  
-2. Follow the instructions from here https://github.com/ThomasEdwardRiley/xpsi_workshop to download the NICER RMF, and put this file in `v0.7.5/model_data/`. Make sure the name of the file is `‘nicer_v1.01_rmf_matrix.txt’`
-3. `cd` to `/nicer/docker` and run `docker build --tag xpsi .` . This takes ~15min to build on my laptop
-4. `cd` back to `/nicer` and run `docker run -it -p 8888:8888 xpsi`
-5. Then run `jupyter notebook --ip 0.0.0.0 --port 8888 --no-browser --allow-root` and copy+paste the notebook link into a browser
-6. In the Jupyter notebook, click ‘Run all cells’. This takes ~15min on my laptop, and will generate output in both the jupyter notebook and the command line
+## Running the XPSI tutorial notebook:  
+1. Clone this repository to your local machine:
+    `gh repo clone sugwg/nicer`
+3. `cd` to `</path/to>/nicer` and build the docker container:
+    `docker build --tag xpsi -f miniconda_base .`
+4. Run the docker container:
+    `docker run -it -p 8888:8888 xpsi`
+5. Copy and paste the http link into a browser, replace the parentheses and their contents with just `127.0.0.1` so that the beginning of the url now reads `http://127.0.0.1:8888/?token=...`, and press enter
+6. Click on the `modeling_0.7.5.ipynb` file to open the Jupyter notebook
+7. From the header menu in the Jupyter notebook, click 'Cell' and then ‘Run All’. As the notebook runs, it will generate output both within the notebook and in the command line
