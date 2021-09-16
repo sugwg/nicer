@@ -34,16 +34,7 @@ RUN conda install -y \
     scipy \
     matplotlib
 
-# Conda env creation, and tell shell to start conda on opening (may not need the last bit)
-RUN curl -L https://raw.githubusercontent.com/ThomasEdwardRiley/xpsi/v0.7.5/environment.yml > /tmp/environment.yml && \
-    conda env create -f /tmp/environment.yml; exit 0 && \
-    # SHELL ["/bin/bash","-c"]   was before the following in previous versions of Dockerfile
-    conda init && \
-    echo 'conda activate xpsi' >> ~/.bashrc
-
-# Jupyter stuff
-SHELL [ "conda", "run", "-n", "xpsi", "/bin/bash", "-c" ]
-RUN python -m ipykernel install --name xpsi --display-name "XPSI Notebook"
+### Previously I was building the conda env and installing ipykernel here, but shouldn't I do this after py/multinest installs?
 
 # Install MultiNest
 RUN git clone https://github.com/farhanferoz/MultiNest.git /opt/multinest-a2b1b5feb5 && \
@@ -62,34 +53,57 @@ RUN git clone https://github.com/JohannesBuchner/PyMultiNest.git && \
     python setup.py install
 
 
+# Conda env creation, and tell shell to start conda on opening (may not need the last bit)
+RUN curl -L https://raw.githubusercontent.com/ThomasEdwardRiley/xpsi/v0.7.5/environment.yml > /tmp/environment.yml && \
+    conda env create -f /tmp/environment.yml; exit 0 && \
+    # SHELL ["/bin/bash","-c"]   was before the following in previous versions of Dockerfile
+    conda init && \
+    echo 'conda activate xpsi' >> ~/.bashrc
+
+# Jupyter stuff
+SHELL [ "conda", "run", "-n", "xpsi", "/bin/bash", "-c"]
+RUN python -m ipykernel install --name xpsi --display-name "XPSI Notebook"
+
+
 # Make xpsi user, switch to that user's directory
 RUN useradd xpsi -m
 WORKDIR /home/xpsi
 
-# Clone and install xpsi
-RUN git clone https://github.com/ThomasEdwardRiley/xpsi.git && \
-    cd /home/xpsi/xpsi && \
-    git checkout v0.7.5 && \
-    CC=/usr/bin/gcc python setup.py install
+### Clone and install xpsi
+# RUN git clone https://github.com/ThomasEdwardRiley/xpsi.git && \
+#     cd /home/xpsi/xpsi && \
+#     git checkout v0.7.5 && \
+#     CC=/usr/bin/gcc python setup.py install
   
 # Copy files to image. Need v0.7.5/ and start.sh. Make sure start.sh has correct permissions
 COPY v0.7.5 .
 COPY start.sh .
 RUN chmod u+x start.sh
 
-### USER xpsi
+# RUN echo 'conda init && source .bashrc && conda activate xpsi' >> /etc/profile
+# RUN echo 'conda init && source .bashrc && conda activate xpsi' >> .bashrc
+# RUN echo 'conda init && conda activate xpsi' >> .bashrc
+
+RUN echo ". /opt/conda/etc/profile.d/conda.sh" >> /home/xpsi/.bashrc && echo "conda activate xpsi" >> /home/xpsi/.bashrc && echo "jupyter notebook --ip 0.0.0.0 --port 8888 --no-browser --allow-root" >> /home/xpsi/.bashrc
+USER xpsi
+
+# CMD bash start.sh
+# CMD conda init && source.bashrc && conda activate xpsi ## Fails with permissions error
 
 ################### Above was functional, with ### uncommented ####################
 # But still requiring manual conda init etc upon opening the container
 
+# RUN conda init && source .bashrc && conda activate xpsi
+
+
 
 # Trying to get the xpsi conda env activated upon opening container
 # RUN echo 'conda init' >> /etc/profile && echo 'exec bash' >> /etc/profile && echo 'conda activate xpsi' >> /etc/profile
-RUN echo 'conda init' >> /home/xpsi/.bashrc && \
-    echo 'exec bash' >> /home/xpsi/.bashrc && \
-    echo 'conda activate xpsi' >> /home/xpsi/.bashrc
+# RUN echo 'conda init' >> /home/xpsi/.bashrc && \
+#     echo 'exec bash' >> /home/xpsi/.bashrc && \
+#     echo 'conda activate xpsi' >> /home/xpsi/.bashrc
 
-USER xpsi
+# USER xpsi
 
 
 
