@@ -5,7 +5,7 @@ This repository is intended to streamline the use of XPSI via a Docker container
 
 ## Running the XPSI tutorial notebook:  
 1. Clone this repository to your local machine:
-    `gh repo clone sugwg/nicer`
+    `git clone https://github.com/sugwg/nicer.git`
 3. `cd` to `</path/to>/nicer` and build the docker container:
     `docker build --tag xpsi -f miniconda_base .`
 4. Run the docker container:
