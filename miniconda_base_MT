@@ -18,8 +18,8 @@ RUN apt-get update && \
     liblapack-dev \
     libatlas3-base \
     libatlas-base-dev \
-    openmpi-bin \
-    libopenmpi-dev \
+    # openmpi-bin \
+    # libopenmpi-dev \
     gfortran \
     gsl-bin \
     libgsl-dev \
@@ -47,14 +47,14 @@ SHELL [ "conda", "run", "-n", "xpsi", "/bin/bash", "-c"]
 RUN python -m ipykernel install --name xpsi --display-name "XPSI Notebook"
 
 # Manually installing the correct OpenMPI version
-# RUN wget https://download.open-mpi.org/release/open-mpi/v1.6/openmpi-1.6.5.tar.gz && \
-#     tar -xvf openmpi-1.6.5.tar.gz && \
-#     cd openmpi-1.6.5/ && \
-#     ./configure && \
-#     make all && \
-#     make install && \
-#     echo "export PATH=\$PATH:\$HOME/opt/openmpi/bin" >> $HOME/.bashrc && \
-#     echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:\$HOME/opt/openmpi/lib" >> $HOME/.bashrc
+RUN wget https://download.open-mpi.org/release/open-mpi/v1.6/openmpi-1.6.5.tar.gz && \
+    tar -xvf openmpi-1.6.5.tar.gz && \
+    cd openmpi-1.6.5/ && \
+    ./configure && \
+    make all && \
+    make install && \
+    echo "export PATH=\$PATH:\$HOME/opt/openmpi/bin" >> $HOME/.bashrc && \
+    echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:\$HOME/opt/openmpi/lib" >> $HOME/.bashrc
 
 # Trying to use pip to install the openmpi.tar.gz, but this fails
 # RUN wget https://download.open-mpi.org/release/open-mpi/v1.6/openmpi-1.6.5.tar.gz && \
