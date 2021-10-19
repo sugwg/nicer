@@ -18,9 +18,11 @@ This repository is intended to streamline the use of XPSI via a Docker container
 ## Running the J0030 analysis single-threaded
 1. Clone this repository to your local machine:
     `git clone https://github.com/sugwg/nicer.git`
-2. `cd` to `</path/to>/nicer` and build the docker container:
+2. `cd` to `</path/to>/nicer` and checkout the 'j0030' branch:
+    `git checkout j0030`
+3. Build the docker container:
     `docker build --tag xpsi -f miniconda_base .`
-3. Run the docker container:
+4. Run the docker container:
     `docker run -it -p 8888:8888 xpsi`
-4. Press 'ctrl+C', type 'y' and press enter when prompted to kill the notebook kernel
-5. `cd` to `j0030/` and run `mpiexec -n 1 python main_run1.py`
+5. Press 'ctrl+C', type 'y' and press enter when prompted to kill the notebook kernel
+6. `cd` to `j0030/` and run `mpiexec -n 1 python main_run1.py`
