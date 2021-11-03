@@ -54,15 +54,13 @@ RUN wget https://download.open-mpi.org/release/open-mpi/v1.6/openmpi-1.6.5.tar.g
     make all && \
     make install && \
     echo "export PATH=\$PATH:\$HOME/opt/openmpi/bin" >> $HOME/.bashrc && \
-    echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:\$HOME/opt/openmpi/lib" >> $HOME/.bashrc
-
-# Trying to use pip to install the openmpi.tar.gz, but this fails
-# RUN wget https://download.open-mpi.org/release/open-mpi/v1.6/openmpi-1.6.5.tar.gz && \
-#     python -m pip install openmpi-1.6.5.tar.gz
-
+    echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:\$HOME/opt/openmpi/lib" >> $HOME/.bashrc && \
+    ls
+# The last line, ls, is necessary for this RUN block to complete through line 57. Not sure why
 
 # Install MultiNest
-RUN git clone https://github.com/farhanferoz/MultiNest.git /opt/multinest-a2b1b5feb5 && \
+RUN ldconfig && \
+    git clone https://github.com/farhanferoz/MultiNest.git /opt/multinest-a2b1b5feb5 && \
     cd /opt/multinest-a2b1b5feb5 && \
     git checkout a2b1b5feb5 && \
     cd /opt/multinest-a2b1b5feb5/MultiNest_v3.11_CMake/multinest/ && \
