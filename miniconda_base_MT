@@ -70,6 +70,15 @@ RUN ldconfig && \
     make
 ENV LD_LIBRARY_PATH=/opt/multinest-a2b1b5feb5/MultiNest_v3.11_CMake/multinest/lib:$LD_LIBRARY_PATH
 
+#Install mpi4py
+# RUN curl -O https://bitbucket.org/mpi4py/mpi4py/downloads/mpi4py-3.0.0.tar.gz && \
+COPY mpi4py-3.0.0.tar.gz .
+RUN tar -zxf mpi4py-3.0.0.tar.gz && \
+    cd mpi4py-3.0.0 && \
+    python setup.py build && \
+    python setup.py install && \
+    mpiexec -n 2 python -m mpi4py.bench helloworld > mpi4py_test.txt
+
 # Install PyMultiNest
 RUN git clone https://github.com/JohannesBuchner/PyMultiNest.git && \
     cd PyMultiNest/ && \
@@ -80,10 +89,11 @@ RUN useradd xpsi -m
 WORKDIR /home/xpsi
 
 # These two commands don't work properly if placed higher up in the dockerfile
-RUN conda install -c conda-forge mpi4py=3.0.0 -y
-RUN pip install GetDist==0.3.1 \
-    nestcheck==0.2.0 \
-    fgivenx
+# RUN conda install -c conda-forge mpi4py=3.0.0 -y
+# RUN pip install GetDist==0.3.1 \
+#     nestcheck==0.2.0 \
+#     fgivenx
+#FIXME delete this block once I know dockerfile builds without it
 
 # Clone and install xpsi
 RUN git clone https://github.com/ThomasEdwardRiley/xpsi.git && \
