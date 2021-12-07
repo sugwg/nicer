@@ -158,4 +158,5 @@ COPY --chown=xpsi \
     j0030/model_data/
 
 RUN echo ". /opt/conda/etc/profile.d/conda.sh" >> /home/xpsi/.bashrc && echo "conda activate xpsi" >> /home/xpsi/.bashrc && echo "jupyter notebook --ip 0.0.0.0 --port 8888 --no-browser --allow-root" >> /home/xpsi/.bashrc
+RUN mkdir /var/lib/condor
 USER xpsi
