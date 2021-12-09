@@ -18,8 +18,6 @@ RUN apt-get update && \
     liblapack-dev \
     libatlas3-base \
     libatlas-base-dev \
-    openmpi-bin \
-    libopenmpi-dev \
     gfortran \
     gsl-bin \
     libgsl-dev \
@@ -47,22 +45,20 @@ SHELL [ "conda", "run", "-n", "xpsi", "/bin/bash", "-c"]
 RUN python -m ipykernel install --name xpsi --display-name "XPSI Notebook"
 
 # Manually installing the correct OpenMPI version
-# RUN wget https://download.open-mpi.org/release/open-mpi/v1.6/openmpi-1.6.5.tar.gz && \
-#     tar -xvf openmpi-1.6.5.tar.gz && \
-#     cd openmpi-1.6.5/ && \
-#     ./configure && \
-#     make all && \
-#     make install && \
-#     echo "export PATH=\$PATH:\$HOME/opt/openmpi/bin" >> $HOME/.bashrc && \
-#     echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:\$HOME/opt/openmpi/lib" >> $HOME/.bashrc
-
-# Trying to use pip to install the openmpi.tar.gz, but this fails
-# RUN wget https://download.open-mpi.org/release/open-mpi/v1.6/openmpi-1.6.5.tar.gz && \
-#     python -m pip install openmpi-1.6.5.tar.gz
-
+RUN wget https://download.open-mpi.org/release/open-mpi/v1.6/openmpi-1.6.5.tar.gz && \
+    tar -xvf openmpi-1.6.5.tar.gz && \
+    cd openmpi-1.6.5/ && \
+    ./configure && \
+    make all && \
+    make install && \
+    echo "export PATH=\$PATH:\$HOME/opt/openmpi/bin" >> $HOME/.bashrc && \
+    echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:\$HOME/opt/openmpi/lib" >> $HOME/.bashrc && \
+    ls
+# The last line, ls, is necessary for this RUN block to complete through line 57. Not sure why
 
 # Install MultiNest
-RUN git clone https://github.com/farhanferoz/MultiNest.git /opt/multinest-a2b1b5feb5 && \
+RUN ldconfig && \
+    git clone https://github.com/farhanferoz/MultiNest.git /opt/multinest-a2b1b5feb5 && \
     cd /opt/multinest-a2b1b5feb5 && \
     git checkout a2b1b5feb5 && \
     cd /opt/multinest-a2b1b5feb5/MultiNest_v3.11_CMake/multinest/ && \
@@ -71,6 +67,14 @@ RUN git clone https://github.com/farhanferoz/MultiNest.git /opt/multinest-a2b1b5
     CC=gcc FC=mpif90 CXX=g++ cmake -DCMAKE_{C,CXX}_FLAGS="-O3 -march=native -funroll-loops" -DCMAKE_Fortran_FLAGS="-O3 -march=native -funroll-loops" .. && \
     make
 ENV LD_LIBRARY_PATH=/opt/multinest-a2b1b5feb5/MultiNest_v3.11_CMake/multinest/lib:$LD_LIBRARY_PATH
+
+#Install mpi4py
+COPY mpi4py-3.0.0.tar.gz .
+RUN tar -zxf mpi4py-3.0.0.tar.gz && \
+    cd mpi4py-3.0.0 && \
+    python setup.py build && \
+    python setup.py install && \
+    mpiexec -n 2 python -m mpi4py.bench helloworld > mpi4py_test.txt
 
 # Install PyMultiNest
 RUN git clone https://github.com/JohannesBuchner/PyMultiNest.git && \
@@ -81,18 +85,13 @@ RUN git clone https://github.com/JohannesBuchner/PyMultiNest.git && \
 RUN useradd xpsi -m
 WORKDIR /home/xpsi
 
-# These two commands don't work properly if placed higher up in the dockerfile
-RUN conda install -c conda-forge mpi4py=3.0.0 -y
-RUN pip install GetDist==0.3.1 \
-    nestcheck==0.2.0 \
-    fgivenx
-
 # Clone and install xpsi
 RUN git clone https://github.com/ThomasEdwardRiley/xpsi.git && \
     cd /home/xpsi/xpsi && \
     git checkout v0.1 && \
     CC=/usr/bin/gcc python setup.py install
   
+# Copy necessary files, giving file ownership to xpsi user
 COPY --chown=xpsi \
     v0.7.5/data/new_synthetic_expected_hreadable.dat \
     v0.7.5/data/new_synthetic_realisation.dat \
@@ -100,14 +99,14 @@ COPY --chown=xpsi \
     v0.7.5/data/synthetic_expected_hreadable.dat \
     v0.7.5/data/synthetic_realisation.dat \
     v0.7.5/data/synthetic_realisation_hreadable.dat \
-    data/
+    tutorial/data/
 
 COPY --chown=xpsi \
     v0.7.5/model_data/nicer_v1.01_arf.txt \
     v0.7.5/model_data/nicer_v1.01_rmf_energyintervals.txt \
     v0.7.5/model_data/nicer_v1.01_rmf_energymap.txt \
     v0.7.5/model_data/nicer_v1.01_rmf_matrix.txt \
-    model_data/
+    tutorial/model_data/
 
 COPY --chown=xpsi \
     v0.7.5/run/run.txt \
@@ -120,9 +119,9 @@ COPY --chown=xpsi \
     v0.7.5/run/runresume.dat \
     v0.7.5/run/runstats.dat \
     v0.7.5/run/runsummary.txt \
-    run/
+    tutorial/run/
 
-COPY --chown=xpsi v0.7.5/modeling_0.7.5.ipynb ./
+COPY --chown=xpsi v0.7.5/modeling_0.7.5.ipynb tutorial/
 
 COPY --chown=xpsi \
     A_NICER_VIEW_OF_PSR_J0030p0451/ST_PST/CustomData.py \
@@ -149,5 +148,6 @@ COPY --chown=xpsi \
     A_NICER_VIEW_OF_PSR_J0030p0451/model_data/README_v171019.txt \
     j0030/model_data/
 
-RUN echo ". /opt/conda/etc/profile.d/conda.sh" >> /home/xpsi/.bashrc && echo "conda activate xpsi" >> /home/xpsi/.bashrc && echo "jupyter notebook --ip 0.0.0.0 --port 8888 --no-browser --allow-root" >> /home/xpsi/.bashrc
+RUN echo ". /opt/conda/etc/profile.d/conda.sh" >> /home/xpsi/.bashrc && echo "conda activate xpsi" >> /home/xpsi/.bashrc
+RUN mkdir /var/lib/condor
 USER xpsi
