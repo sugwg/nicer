@@ -93,35 +93,35 @@ RUN git clone https://github.com/ThomasEdwardRiley/xpsi.git && \
   
 # Copy necessary files, giving file ownership to xpsi user
 COPY --chown=xpsi \
-    v0.7.5/data/new_synthetic_expected_hreadable.dat \
-    v0.7.5/data/new_synthetic_realisation.dat \
-    v0.7.5/data/new_synthetic_realisation_hreadable.dat \
-    v0.7.5/data/synthetic_expected_hreadable.dat \
-    v0.7.5/data/synthetic_realisation.dat \
-    v0.7.5/data/synthetic_realisation_hreadable.dat \
+    tutorial/data/new_synthetic_expected_hreadable.dat \
+    tutorial/data/new_synthetic_realisation.dat \
+    tutorial/data/new_synthetic_realisation_hreadable.dat \
+    tutorial/data/synthetic_expected_hreadable.dat \
+    tutorial/data/synthetic_realisation.dat \
+    tutorial/data/synthetic_realisation_hreadable.dat \
     tutorial/data/
 
 COPY --chown=xpsi \
-    v0.7.5/model_data/nicer_v1.01_arf.txt \
-    v0.7.5/model_data/nicer_v1.01_rmf_energyintervals.txt \
-    v0.7.5/model_data/nicer_v1.01_rmf_energymap.txt \
-    v0.7.5/model_data/nicer_v1.01_rmf_matrix.txt \
+    tutorial/model_data/nicer_v1.01_arf.txt \
+    tutorial/model_data/nicer_v1.01_rmf_energyintervals.txt \
+    tutorial/model_data/nicer_v1.01_rmf_energymap.txt \
+    tutorial/model_data/nicer_v1.01_rmf_matrix.txt \
     tutorial/model_data/
 
 COPY --chown=xpsi \
-    v0.7.5/run/run.txt \
-    v0.7.5/run/rundead-birth.txt \
-    v0.7.5/run/runev.dat \
-    v0.7.5/run/runlive.points \
-    v0.7.5/run/runphys_live-birth.txt \
-    v0.7.5/run/runphys_live.points \
-    v0.7.5/run/runpost_equal_weights.dat \
-    v0.7.5/run/runresume.dat \
-    v0.7.5/run/runstats.dat \
-    v0.7.5/run/runsummary.txt \
+    tutorial/run/run.txt \
+    tutorial/run/rundead-birth.txt \
+    tutorial/run/runev.dat \
+    tutorial/run/runlive.points \
+    tutorial/run/runphys_live-birth.txt \
+    tutorial/run/runphys_live.points \
+    tutorial/run/runpost_equal_weights.dat \
+    tutorial/run/runresume.dat \
+    tutorial/run/runstats.dat \
+    tutorial/run/runsummary.txt \
     tutorial/run/
 
-COPY --chown=xpsi v0.7.5/modeling_0.7.5.ipynb tutorial/
+COPY --chown=xpsi tutorial/modeling_0.7.5.ipynb tutorial/
 
 COPY --chown=xpsi \
     A_NICER_VIEW_OF_PSR_J0030p0451/ST_PST/CustomData.py \
