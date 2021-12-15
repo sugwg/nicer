@@ -1,5 +1,5 @@
 executable = /bin/singularity
-arguments = exec --bind /var/lib/condor:/var/lib/condor  --home /home/patrick.miles:/srv /cvmfs/singularity.opensciencegrid.org/patrickrmiles/j0030:analysis_v0.3 /srv/j0030/nicer/run_j0030_test.sh
+arguments = exec --bind /var/lib/condor:/var/lib/condor  --home /home/patrick.miles:/srv /cvmfs/singularity.opensciencegrid.org/patrickrmiles/j0030:xpsi /srv/j0030/nicer/run_j0030_test.sh
 
 log = output/run_j0030_test.$(cluster).log
 output = output/run_j0030_test.$(cluster).out
