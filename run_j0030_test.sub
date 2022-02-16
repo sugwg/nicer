@@ -1,9 +1,9 @@
 executable = /bin/singularity
-arguments = exec --bind /var/lib/condor:/var/lib/condor  --home /home/patrick.miles:/srv /cvmfs/singularity.opensciencegrid.org/patrickrmiles/j0030:xpsi /srv/j0030/nicer/run_j0030_test.sh
+arguments = exec --bind /var/lib/condor:/var/lib/condor  --home /home/chaitanya.afle:/srv /cvmfs/singularity.opensciencegrid.org/chaitanyaafle/nicer:5c721b9 /srv/projects/nicer/run_j0030_test.sh
 
-log = output/run_j0030_test.$(cluster).log
-output = output/run_j0030_test.$(cluster).out
-error = output/run_j0030_test.$(cluster).err
+log = output_files_5c721b9_mpi/run_j0030_test.$(cluster).log
+output = output_files_5c721b9_mpi/run_j0030_test.$(cluster).out
+error = output_files_5c721b9_mpi/run_j0030_test.$(cluster).err
 
 request_cpus = 40
 
