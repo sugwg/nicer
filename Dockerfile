@@ -47,6 +47,7 @@ RUN rm -f /tmp/mpi4py-3.0.0.tar.gz
 COPY mpi.cfg mpi4py-3.0.0/mpi.cfg
 RUN cd mpi4py-3.0.0 && python setup.py build
 RUN cd mpi4py-3.0.0 && python setup.py install
+RUN rm -rf mpi4py-3.0.0
 
 #RUN pip install GetDist==0.3.1 \
 #    nestcheck==0.2.0 \
