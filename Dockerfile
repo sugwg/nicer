@@ -84,63 +84,63 @@ RUN git clone https://github.com/ThomasEdwardRiley/xpsi.git && \
 # You need to run the following otherwise everything gets installed properly but when you import xpsi in ipython shell, it gives error
 RUN apt-get --assume-yes install libxi6 libgconf-2-4
  
-# # Copy necessary files, giving file ownership to xpsi user
-# COPY --chown=xpsi \
-#    tutorial/data/new_synthetic_expected_hreadable.dat \
-#    tutorial/data/new_synthetic_realisation.dat \
-#    tutorial/data/new_synthetic_realisation_hreadable.dat \
-#    tutorial/data/synthetic_expected_hreadable.dat \
-#    tutorial/data/synthetic_realisation.dat \
-#    tutorial/data/synthetic_realisation_hreadable.dat \
-#    tutorial/data/
+# Copy necessary files, giving file ownership to xpsi user
+COPY --chown=xpsi \
+   tutorial/data/new_synthetic_expected_hreadable.dat \
+   tutorial/data/new_synthetic_realisation.dat \
+   tutorial/data/new_synthetic_realisation_hreadable.dat \
+   tutorial/data/synthetic_expected_hreadable.dat \
+   tutorial/data/synthetic_realisation.dat \
+   tutorial/data/synthetic_realisation_hreadable.dat \
+   tutorial/data/
 
-# COPY --chown=xpsi \
-#    tutorial/model_data/nicer_v1.01_arf.txt \
-#    tutorial/model_data/nicer_v1.01_rmf_energyintervals.txt \
-#    tutorial/model_data/nicer_v1.01_rmf_energymap.txt \
-#    tutorial/model_data/nicer_v1.01_rmf_matrix.txt \
-#    tutorial/model_data/
+COPY --chown=xpsi \
+   tutorial/model_data/nicer_v1.01_arf.txt \
+   tutorial/model_data/nicer_v1.01_rmf_energyintervals.txt \
+   tutorial/model_data/nicer_v1.01_rmf_energymap.txt \
+   tutorial/model_data/nicer_v1.01_rmf_matrix.txt \
+   tutorial/model_data/
 
-# COPY --chown=xpsi \
-#    tutorial/run/run.txt \
-#    tutorial/run/rundead-birth.txt \
-#    tutorial/run/runev.dat \
-#    tutorial/run/runlive.points \
-#    tutorial/run/runphys_live-birth.txt \
-#    tutorial/run/runphys_live.points \
-#    tutorial/run/runpost_equal_weights.dat \
-#    tutorial/run/runresume.dat \
-#    tutorial/run/runstats.dat \
-#    tutorial/run/runsummary.txt \
-#    tutorial/run/
+COPY --chown=xpsi \
+   tutorial/run/run.txt \
+   tutorial/run/rundead-birth.txt \
+   tutorial/run/runev.dat \
+   tutorial/run/runlive.points \
+   tutorial/run/runphys_live-birth.txt \
+   tutorial/run/runphys_live.points \
+   tutorial/run/runpost_equal_weights.dat \
+   tutorial/run/runresume.dat \
+   tutorial/run/runstats.dat \
+   tutorial/run/runsummary.txt \
+   tutorial/run/
 
-# COPY --chown=xpsi tutorial/modeling_0.7.5.ipynb tutorial/
+COPY --chown=xpsi tutorial/modeling_0.7.5.ipynb tutorial/
 
-# COPY --chown=xpsi \
-#    A_NICER_VIEW_OF_PSR_J0030p0451/ST_PST/CustomData.py \
-#    A_NICER_VIEW_OF_PSR_J0030p0451/ST_PST/CustomInstrument.py \
-#    A_NICER_VIEW_OF_PSR_J0030p0451/ST_PST/CustomInterstellar.py \
-#    A_NICER_VIEW_OF_PSR_J0030p0451/ST_PST/CustomPhotosphere.py \
-#    A_NICER_VIEW_OF_PSR_J0030p0451/ST_PST/CustomPrior.py \
-#    A_NICER_VIEW_OF_PSR_J0030p0451/ST_PST/CustomPulse.py \
-#    A_NICER_VIEW_OF_PSR_J0030p0451/ST_PST/CustomSpacetime.py \
-#    A_NICER_VIEW_OF_PSR_J0030p0451/ST_PST/main_run1.py \
-#    j0030/
+COPY --chown=xpsi \
+   A_NICER_VIEW_OF_PSR_J0030p0451/ST_PST/CustomData.py \
+   A_NICER_VIEW_OF_PSR_J0030p0451/ST_PST/CustomInstrument.py \
+   A_NICER_VIEW_OF_PSR_J0030p0451/ST_PST/CustomInterstellar.py \
+   A_NICER_VIEW_OF_PSR_J0030p0451/ST_PST/CustomPhotosphere.py \
+   A_NICER_VIEW_OF_PSR_J0030p0451/ST_PST/CustomPrior.py \
+   A_NICER_VIEW_OF_PSR_J0030p0451/ST_PST/CustomPulse.py \
+   A_NICER_VIEW_OF_PSR_J0030p0451/ST_PST/CustomSpacetime.py \
+   A_NICER_VIEW_OF_PSR_J0030p0451/ST_PST/main_run1.py \
+   j0030/
 
-# COPY --chown=xpsi \
-#    A_NICER_VIEW_OF_PSR_J0030p0451/data/NICER_J0030_PaulRay_fixed_evt_25to299__preprocessed.txt \
-#    j0030/data/
+COPY --chown=xpsi \
+   A_NICER_VIEW_OF_PSR_J0030p0451/data/NICER_J0030_PaulRay_fixed_evt_25to299__preprocessed.txt \
+   j0030/data/
 
-# COPY --chown=xpsi \
-#    A_NICER_VIEW_OF_PSR_J0030p0451/model_data/crab_ratio_SA80_d49.txt \
-#    A_NICER_VIEW_OF_PSR_J0030p0451/model_data/interstellar_phot_frac.txt \
-#    A_NICER_VIEW_OF_PSR_J0030p0451/model_data/ni_xrcall_onaxis_v1.02_arf.txt \
-#    A_NICER_VIEW_OF_PSR_J0030p0451/model_data/nicer_upd_d49_matrix.txt \
-#    A_NICER_VIEW_OF_PSR_J0030p0451/model_data/nicer_upd_energy_bounds.txt \
-#    A_NICER_VIEW_OF_PSR_J0030p0451/model_data/nsx_H_v171019.out \
-#    A_NICER_VIEW_OF_PSR_J0030p0451/model_data/README_v171019.txt \
-#    j0030/model_data/
+COPY --chown=xpsi \
+   A_NICER_VIEW_OF_PSR_J0030p0451/model_data/crab_ratio_SA80_d49.txt \
+   A_NICER_VIEW_OF_PSR_J0030p0451/model_data/interstellar_phot_frac.txt \
+   A_NICER_VIEW_OF_PSR_J0030p0451/model_data/ni_xrcall_onaxis_v1.02_arf.txt \
+   A_NICER_VIEW_OF_PSR_J0030p0451/model_data/nicer_upd_d49_matrix.txt \
+   A_NICER_VIEW_OF_PSR_J0030p0451/model_data/nicer_upd_energy_bounds.txt \
+   A_NICER_VIEW_OF_PSR_J0030p0451/model_data/nsx_H_v171019.out \
+   A_NICER_VIEW_OF_PSR_J0030p0451/model_data/README_v171019.txt \
+   j0030/model_data/
 
-# RUN echo ". /opt/conda/etc/profile.d/conda.sh" >> /home/xpsi/.bashrc && echo "conda activate xpsi" >> /home/xpsi/.bashrc
-# RUN mkdir /var/lib/condor
-# USER xpsi
+RUN echo ". /opt/conda/etc/profile.d/conda.sh" >> /home/xpsi/.bashrc && echo "conda activate xpsi" >> /home/xpsi/.bashrc
+RUN mkdir /var/lib/condor
+USER xpsi
