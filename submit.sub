@@ -1,0 +1,11 @@
+executable = /bin/singularity
+arguments = exec --bind /var/lib/condor:/var/lib/condor  --home /home/chaitanya.afle:/srv /cvmfs/singularity.opensciencegrid.org/chaitanyaafle/nicer:f96934c /srv/projects/nicer/run_j0030.sh
+
+log = output_files_f96934c/run_j0030_test.$(cluster).log
+output = output_files_f96934c/run_j0030_test.$(cluster).out
+error = output_files_f96934c/run_j0030_test.$(cluster).err
+
+request_cpus = 480
+
+requirements = HasSingularity == true
+queue 1
