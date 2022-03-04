@@ -143,4 +143,6 @@ COPY --chown=xpsi \
 
 RUN echo ". /opt/conda/etc/profile.d/conda.sh" >> /home/xpsi/.bashrc && echo "conda activate xpsi" >> /home/xpsi/.bashrc
 RUN mkdir /var/lib/condor
+RUN mkdir -p /.singularity.d/env
+COPY .singularity.d/env/00-xpsi.sh /.singularity.d/env/00-xpsi.sh
 USER xpsi
