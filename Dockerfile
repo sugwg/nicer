@@ -156,9 +156,19 @@ RUN echo "export PATH=$PATH:/usr/lib64/openmpi/bin/" >> /home/xpsi/.profile
 
 RUN apt-get install -y librdmacm-dev libosmcomp4 libpsm2-2 libfabric1
 
+
 RUN wget http://ftp.us.debian.org/debian/pool/main/o/opensm/libosmcomp3_3.3.20-1_amd64.deb
 RUN dpkg -i libosmcomp3_3.3.20-1_amd64.deb 
 RUN rm -rf libosmcomp3_3.3.20-1_amd64.deb
+
+
+RUN wget http://ftp.us.debian.org/debian/pool/main/g/gcc-6/gcc-6-base_6.3.0-18+deb9u1_amd64.deb
+RUN dpkg -i gcc-6-base_6.3.0-18+deb9u1_amd64.deb
+RUN rm -rf gcc-6-base_6.3.0-18+deb9u1_amd64.deb
+RUN wget http://ftp.us.debian.org/debian/pool/main/g/gcc-6/libgfortran3_6.3.0-18+deb9u1_amd64.deb
+RUN dpkg -i libgfortran3_6.3.0-18+deb9u1_amd64.deb
+RUN rm -rf libgfortran3_6.3.0-18+deb9u1_amd64.deb
+
 RUN ldconfig -v
 
 USER xpsi
