@@ -20,16 +20,22 @@ RUN apt-get update && \
     curl \
     libsm6 \
     libxext6 \
-    libgl1-mesa-glx
+    libgl1-mesa-glx \
+    libhwloc5
+#    librdmacm 
 
-RUN curl https://download.open-mpi.org/release/open-mpi/v1.10/openmpi-1.10.6.tar.gz > /tmp/openmpi-1.10.6.tar.gz
-RUN tar -zxvf /tmp/openmpi-1.10.6.tar.gz
-RUN rm -f /tmp/openmpi-1.10.6.tar.gz
-RUN cd openmpi-1.10.6 && ./configure
-RUN cd openmpi-1.10.6 && make all
-RUN cd openmpi-1.10.6 && make install
-RUN rm -rf openmpi-1.10.6
+#RUN curl https://download.open-mpi.org/release/open-mpi/v1.10/openmpi-1.10.6.tar.gz > /tmp/openmpi-1.10.6.tar.gz
+#RUN tar -zxvf /tmp/openmpi-1.10.6.tar.gz
+#RUN rm -f /tmp/openmpi-1.10.6.tar.gz
+#RUN cd openmpi-1.10.6 && ./configure
+#RUN cd openmpi-1.10.6 && make all
+#RUN cd openmpi-1.10.6 && make install
+#RUN rm -rf openmpi-1.10.6
+COPY sugwg-openmpi-1.10.6.tar.gz sugwg-openmpi-1.10.6.tar.gz
+RUN tar -C / -zxvf sugwg-openmpi-1.10.6.tar.gz
+RUN echo "/usr/lib64/openmpi/lib" > /etc/ld.so.conf.d/sugwg-openmpi.conf
 RUN ldconfig -v
+RUN ldd /usr/lib64/openmpi/lib/libmpi.so
 
 RUN curl -L https://raw.githubusercontent.com/ThomasEdwardRiley/xpsi/v0.7.5/environment.yml > /tmp/environment.yml
 RUN conda env create -f /tmp/environment.yml; exit 0
@@ -62,7 +68,7 @@ RUN ldconfig && \
    cd /opt/multinest-a2b1b5feb5/MultiNest_v3.11_CMake/multinest/ && \
    mkdir build && \
    cd build && \
-   CC=gcc FC=mpif90 CXX=g++ cmake -DCMAKE_{C,CXX}_FLAGS="-O3 -march=native -funroll-loops" -DCMAKE_Fortran_FLAGS="-O3 -march=native -funroll-loops" .. && \
+   CC=gcc FC=/usr/lib64/openmpi/bin/mpif90 CXX=g++ cmake -DCMAKE_{C,CXX}_FLAGS="-O3 -march=native -funroll-loops" -DCMAKE_Fortran_FLAGS="-O3 -march=native -funroll-loops" .. && \
    make
 ENV LD_LIBRARY_PATH=/opt/multinest-a2b1b5feb5/MultiNest_v3.11_CMake/multinest/lib:$LD_LIBRARY_PATH
 
@@ -143,4 +149,16 @@ COPY --chown=xpsi \
 
 RUN echo ". /opt/conda/etc/profile.d/conda.sh" >> /home/xpsi/.bashrc && echo "conda activate xpsi" >> /home/xpsi/.bashrc
 RUN mkdir /var/lib/condor
+RUN mkdir -p /.singularity.d/env
+COPY .singularity.d/env/00-xpsi.sh /.singularity.d/env/00-xpsi.sh
+
+RUN echo "export PATH=$PATH:/usr/lib64/openmpi/bin/" >> /home/xpsi/.profile
+
+RUN apt-get install -y librdmacm-dev libosmcomp4 libpsm2-2 libfabric1
+
+RUN wget http://ftp.us.debian.org/debian/pool/main/o/opensm/libosmcomp3_3.3.20-1_amd64.deb
+RUN dpkg -i libosmcomp3_3.3.20-1_amd64.deb 
+RUN rm -rf libosmcomp3_3.3.20-1_amd64.deb
+RUN ldconfig -v
+
 USER xpsi
