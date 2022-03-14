@@ -1,11 +1,26 @@
-executable = /bin/singularity
-arguments = exec --bind /var/lib/condor:/var/lib/condor  --home /home/chaitanya.afle:/srv /cvmfs/singularity.opensciencegrid.org/chaitanyaafle/nicer:f96934c /srv/projects/nicer/run_j0030.sh
+universe = parallel
+# getenv = True
+executable = /home/chaitanya.afle/projects/nicer/openmpiscript
+arguments = /bin/singularity exec --bind /var/lib/condor:/var/lib/condor --home /home/chaitanya.afle:/srv /cvmfs/singularity.opensciencegrid.org/chaitanyaafle/nicer:dev /srv/projects/nicer/run_j0030.sh
 
-log = output_files_f96934c/run_j0030_test.$(cluster).log
-output = output_files_f96934c/run_j0030_test.$(cluster).out
-error = output_files_f96934c/run_j0030_test.$(cluster).err
+log = /home/chaitanya.afle/projects/nicer/logs/run_j0030.$(cluster).log
+output = /home/chaitanya.afle/projects/nicer/logs/run_j0030.$(cluster).out
+error = /home/chaitanya.afle/projects/nicer/logs/run_j0030.$(cluster).err
 
-request_cpus = 480
+machine_count = 3
+request_cpus = 5
+
+stream_error = True
+stream_input = True
+stream_output = True
+
+should_transfer_files = yes
+transfer_input_files = /home/chaitanya.afle/projects/nicer/run_j0030.py, /home/chaitanya.afle/projects/nicer/run_j0030.sh
+
+accounting_group = sugwg.astro
+notification = complete
+notify_user = chafle@syr.edu
+batch_name = nicer_j0030
 
 requirements = HasSingularity == true
-queue 1
+queue

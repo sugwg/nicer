@@ -183,8 +183,8 @@ do
         ##
 
         # optionally set MCA values for increasing mpirun verbosity
-        export OMPI_MCA_plm_base_verbose=30
-        export OMPI_MCA_btl_base_verbose=30
+        # export OMPI_MCA_plm_base_verbose=30
+        # export OMPI_MCA_btl_base_verbose=30
 
         # run mpirun in the background and wait for it to exit
         #mpirun -v --prefix $MPDIR --mca $mca_ssh_agent $CONDOR_SSH -n $(( $_CONDOR_NPROCS * $_CONDOR_REQUEST_CPUS )) -hostfile machines -x PYTHONPATH -x PATH -x OMP_NUM_THREADS -x LD_LIBRARY_PATH -x LAL_DATA_PATH $EXECUTABLE $@ &
@@ -200,7 +200,7 @@ do
         echo "Working directory:"
         pwd
 
-        /usr/lib64/openmpi/bin/mpirun -v --prefix $MPDIR --mca $mca_ssh_agent $CONDOR_SSH -n $(( $_CONDOR_NPROCS * $_CONDOR_REQUEST_CPUS )) -hostfile machines -x _CONDOR_NPROCS -x _CONDOR_REQUEST_CPUS -x PYTHONPATH -x PATH -x LD_LIBRARY_PATH /bin/singularity exec --home $(pwd):/srv --pwd /srv /cvmfs/singularity.opensciencegrid.org/chaitanyaafle/nicer:4171daa $EXECUTABLE $@
+        /usr/lib64/openmpi/bin/mpirun -v --prefix $MPDIR --mca $mca_ssh_agent $CONDOR_SSH -n $(( $_CONDOR_NPROCS * $_CONDOR_REQUEST_CPUS )) -hostfile machines -x _CONDOR_NPROCS -x _CONDOR_REQUEST_CPUS -x PYTHONPATH -x PATH -x LD_LIBRARY_PATH $EXECUTABLE $@
         mpi_return=$?
         if [ $mpi_return -ne 0 ]; then
             sshd_cleanup

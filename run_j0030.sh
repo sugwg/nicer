@@ -1,5 +1,8 @@
 #!/bin/bash
-echo "Hello, world"
+
+set -x
+echo "Hello, world" 
 . /opt/conda/etc/profile.d/conda.sh
 conda activate xpsi
-mpiexec -n 480 python /srv/projects/nicer/run_j0030.py
+
+python /srv/projects/nicer/run_j0030.py
