@@ -17,7 +17,7 @@ This repository is intended to streamline the use of XPSI (https://xpsi-group.gi
 
 5. Changes to be made in the submitfile `submit.sub`:
    1. On line 4, change `/home/chaitanya.afle:/srv` to `/home/<dir>:/srv` where `<dir>` is your home directory on `sugwg-condor`
-   2. On line 4, change to `/srv/<nicer_path>/nicer/run_j0030.sh`
+   2. On line 4, change to `/srv/<nicer_path>/run_j0030.sh`
    3. On line 10, give the appropriate argument for the number of machines to be used, eg. `machine_count = 2`.
    4. On line 11, give the appropriate argument for number of nodes per machine to be used, eg. `request_cpus = 40`.
    5. To use an already-synced container, e.g. `chaitanyaafle/nicer:8d3b23d`, verify that the correct container identifier and tag are present in the arguments: `/cvmfs/singularity.opensciencegrid.org/chaitanyaafle/nicer:8d3b23d`.
@@ -28,11 +28,11 @@ This repository is intended to streamline the use of XPSI (https://xpsi-group.gi
    3. Verify the name of the `<logs_directory>` on lines 6, 7, and 8 in `submit.sub`.
 
 7. Changes to be made in the python script `run_j0030.py`:
-   1. Replace `<nicer_path>` to its appropriate value in `/srv/<nicer_path>/nicer/`... on lines 18, 22, 23, 24, 27, 29, and 112
+   1. Replace `<nicer_path>` to its appropriate value in `/srv/<nicer_path>/`... on lines 18, 22, 23, 24, 27, 29, and 112
    2. In `runtime_params`, the value of the key `'outputfiles_basename'` (line 152) should be `/srv/<nicer_path>/<output_directory>/run1_nlive1000_eff0.3_noCONST_noMM_noIS_tol-1`.
 
 8. Changes to be made in the executable `run_j0030.sh`, assuming `nicer/` was cloned to `~/<nicer_path>`:
-      1. Replace `<nicer_path>` to its appropriate value in `/srv/<nicer_path>/nicer/`... on line 5
+      1. Replace `<nicer_path>` to its appropriate value in `/srv/<nicer_path>/run_j0030.py`... on line 8
 
 9. Submit the condor job: `condor_submit submit.sub`
 
