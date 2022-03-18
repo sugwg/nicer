@@ -1,10 +1,12 @@
+#!/usr/bin/env python
+
 from __future__ import print_function, division
 
 import numpy as np
 import math
-
+print("importing xpsi ...")
 import xpsi
-
+print("successfully imported xpsi")
 print('Rank reporting: %d' % xpsi._rank)
 
 from CustomData import CustomData
@@ -15,18 +17,18 @@ from CustomSpacetime import CustomSpacetime
 from CustomPrior import CustomPrior
 from CustomPhotosphere import CustomPhotosphere
 
-data = CustomData.from_SWG('/srv/projects/nicer/A_NICER_VIEW_OF_PSR_J0030p0451/data/NICER_J0030_PaulRay_fixed_evt_25to299__preprocessed.txt', 1936864.0)
+data = CustomData.from_SWG('/srv/<nicer_path>/A_NICER_VIEW_OF_PSR_J0030p0451/data/NICER_J0030_PaulRay_fixed_evt_25to299__preprocessed.txt', 1936864.0)
 
 NICER = CustomInstrument.from_SWG(num_params=3,
                     bounds=[(0.5,1.5),(0.0,1.0),(0.5,1.5)],
-                    ARF = '/srv/projects/nicer/A_NICER_VIEW_OF_PSR_J0030p0451/model_data/ni_xrcall_onaxis_v1.02_arf.txt',
-                    RMF = '/srv/projects/nicer/A_NICER_VIEW_OF_PSR_J0030p0451/model_data/nicer_upd_d49_matrix.txt',
-                    ratio = '/srv/projects/nicer/A_NICER_VIEW_OF_PSR_J0030p0451/model_data/crab_ratio_SA80_d49.txt',
+                    ARF = '/srv/<nicer_path>/A_NICER_VIEW_OF_PSR_J0030p0451/model_data/ni_xrcall_onaxis_v1.02_arf.txt',
+                    RMF = '/srv/<nicer_path>/A_NICER_VIEW_OF_PSR_J0030p0451/model_data/nicer_upd_d49_matrix.txt',
+                    ratio = '/srv/<nicer_path>/A_NICER_VIEW_OF_PSR_J0030p0451/model_data/crab_ratio_SA80_d49.txt',
                     max_input=700,
                     min_input=0,
-                    chan_edges = '/srv/projects/nicer/A_NICER_VIEW_OF_PSR_J0030p0451/model_data/nicer_upd_energy_bounds.txt')
+                    chan_edges = '/srv/<nicer_path>/A_NICER_VIEW_OF_PSR_J0030p0451/model_data/nicer_upd_energy_bounds.txt')
 
-interstellar = CustomInterstellar.from_SWG('/srv/projects/nicer/A_NICER_VIEW_OF_PSR_J0030p0451/model_data/interstellar_phot_frac.txt',
+interstellar = CustomInterstellar.from_SWG('/srv/<nicer_path>/A_NICER_VIEW_OF_PSR_J0030p0451/model_data/interstellar_phot_frac.txt',
                                            num_params = 1,
                                            bounds = [(0.0, 5.0)])
 
@@ -109,7 +111,7 @@ spot = TwoSpots((primary, secondary))
 photosphere = CustomPhotosphere(num_params = 0, bounds = [],
                                 tag = 'all', spot = spot, elsewhere = None)
 
-photosphere.spot_atmosphere = '/srv/projects/nicer/A_NICER_VIEW_OF_PSR_J0030p0451/model_data/nsx_H_v171019.out'
+photosphere.spot_atmosphere = '/srv/<nicer_path>/A_NICER_VIEW_OF_PSR_J0030p0451/model_data/nsx_H_v171019.out'
 
 star = xpsi.Star(spacetime = spacetime, photospheres = photosphere)
 
@@ -149,7 +151,7 @@ runtime_params = {'resume': False,
                   'importance_nested_sampling': False,
                   'multimodal': False,
                   'n_clustering_params': None,
-                  'outputfiles_basename': '/srv/projects/nicer/output_files_f96934c/run1_nlive1000_eff0.3_noCONST_noMM_noIS_tol-1',
+                  'outputfiles_basename': '/srv/<nicer_path>/<output_directory>/run1_nlive1000_eff0.3_noCONST_noMM_noIS_tol-1',
                   'n_iter_before_update': 100,
                   'n_live_points': 1000,
                   'sampling_efficiency': 0.3,
