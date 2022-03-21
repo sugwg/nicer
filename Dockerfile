@@ -29,7 +29,11 @@ RUN apt-get update && \
     libpsm2-2 \
     libfabric1 \
     libxi6 \
-    libgconf-2-4
+    libgconf-2-4 \
+    latex \
+    dvipng \
+    texlive-fonts-recommended \
+    texlive-fonts-extra
 
 RUN wget http://ftp.us.debian.org/debian/pool/main/o/opensm/libosmcomp3_3.3.20-1_amd64.deb && \
     dpkg -i libosmcomp3_3.3.20-1_amd64.deb && \
@@ -184,6 +188,12 @@ COPY --chown=xpsi \
      A_NICER_VIEW_OF_PSR_J0030p0451/model_data/nsx_H_v171019.out \
      A_NICER_VIEW_OF_PSR_J0030p0451/model_data/README_v171019.txt \
      j0030/model_data/
+
+RUN wget https://zenodo.org/record/3707821/files/A_NICER_VIEW_OF_PSR_J0030p0451.tar.gz &&\
+    tar -xvf A_NICER_VIEW_OF_PSR_J0030p0451.tar.gz &&\
+    rm -rf A_NICER_VIEW_OF_PSR_J0030p0451.tar.gz
+
+COPY --chown=xpsi plot_posteriors.ipynb A_NICER_VIEW_OF_PSR_J0030p0451/
 
 RUN echo ". /opt/conda/etc/profile.d/conda.sh" >> /home/xpsi/.bashrc && echo "conda activate xpsi" >> /home/xpsi/.bashrc
 RUN mkdir /var/lib/condor
