@@ -89,7 +89,7 @@ fi
 CONDOR_SSH=$(condor_config_val libexec)
 CONDOR_SSH=$CONDOR_SSH/condor_ssh
 
-SSHD_SH=/home/chaitanya.afle/projects/nicer
+SSHD_SH=<home_dir>/<nicer_path>
 SSHD_SH=$SSHD_SH/sshd.sh
 ##
 
