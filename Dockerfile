@@ -30,7 +30,7 @@ RUN apt-get update && \
     libfabric1 \
     libxi6 \
     libgconf-2-4 \
-    latex \
+    texlive-latex-base \
     dvipng \
     texlive-fonts-recommended \
     texlive-fonts-extra
@@ -126,8 +126,10 @@ ENV PATH=/usr/lib64/openmpi/bin/:$PATH
 ### Clone and install xpsi
 RUN git clone https://github.com/ThomasEdwardRiley/xpsi.git && \
     cd /home/xpsi/xpsi && \
-    git checkout v0.1 && \
     CC=/usr/bin/gcc python setup.py install
+    
+    # git checkout v0.1 && \
+    # CC=/usr/bin/gcc python setup.py install
 
 ### You need to run the following otherwise everything gets installed properly but when you import xpsi in ipython shell, it gives error
 # RUN apt-get --assume-yes install libxi6 libgconf-2-4
@@ -191,7 +193,9 @@ COPY --chown=xpsi \
 
 RUN wget https://zenodo.org/record/3707821/files/A_NICER_VIEW_OF_PSR_J0030p0451.tar.gz &&\
     tar -xvf A_NICER_VIEW_OF_PSR_J0030p0451.tar.gz &&\
-    rm -rf A_NICER_VIEW_OF_PSR_J0030p0451.tar.gz
+    rm -rf A_NICER_VIEW_OF_PSR_J0030p0451.tar.gz &&\
+    chown -R xpsi A_NICER_VIEW_OF_PSR_J0030p0451 &&\
+    chgrp -R xpsi A_NICER_VIEW_OF_PSR_J0030p0451
 
 COPY --chown=xpsi plot_posteriors.ipynb A_NICER_VIEW_OF_PSR_J0030p0451/
 
